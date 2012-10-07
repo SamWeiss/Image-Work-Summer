@@ -1,0 +1,74 @@
+import java.io.*;
+import java.util.ArrayList;
+class FileRead{
+	public FileRead(){
+
+	}
+	public ArrayList<String> readFile(ArrayList<String> Paths){
+		String Path;
+		ArrayList<String> output = new ArrayList<String>();
+		for(int i = 0; i < Paths.size(); i++){
+			Path = Paths.get(i);
+			//System.out.println("location 1");
+			try{
+				//System.out.println("location 2");
+				// Open the file that is the first 
+				// command line parameter
+				FileInputStream fstream = new FileInputStream(Path);
+				// Get the object of DataInputStream
+				DataInputStream in = new DataInputStream(fstream);
+				BufferedReader br = new BufferedReader(new InputStreamReader(in));
+				String strLine;
+				//Read File Line By Line
+				while ((strLine = br.readLine()) != null)   {
+					// Print the content on the console
+					output.add(strLine);
+				}
+				//System.out.println("location 3");
+				//Close the input stream
+				in.close();
+				return output;
+			}catch (Exception e){//Catch exception if any
+				//System.err.println("Error: " + e.getMessage());
+			}
+
+		}
+		return output;
+	}
+	public String writeFile(ArrayList<String> Paths, String outputText){
+		
+		String endPath  = "";
+		boolean error = true;
+		System.out.println("location 1");
+		for(int i = 0; i < Paths.size() && error; i++){
+			endPath = Paths.get(i);
+			try{
+				File f;
+				f=new File(endPath);
+				if(!f.exists()){
+					f.createNewFile();
+					System.out.println("Please note, a new settings file was created at " + endPath + " using default values\nThe program will now quit so that" +
+							" you may enter the desired values, the defaults are there to serve only as examples");
+				}
+			} catch (Exception e){//Catch exception if any
+				System.err.println("Error: " + e.getMessage());
+			}
+			//endPath = Paths.get(i);
+			System.out.println("location 2");
+			try{
+				// Create file 
+				FileWriter fstream = new FileWriter(endPath);
+				BufferedWriter out = new BufferedWriter(fstream);
+				out.write(outputText);
+				error = false;
+				System.out.println("location 3");
+				//Close the output stream
+				out.close();
+			}catch (Exception e){//Catch exception if any
+				System.err.println("Error: " + e.getMessage());
+			}
+		}
+		return endPath;
+
+	}
+}
